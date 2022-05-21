@@ -1,0 +1,12 @@
+import "tfplan/v2" as tfplan
+
+instance_types = [
+	"m5.large",
+]
+
+violations = filter tfplan.planned_values.resources as _, r {
+		r.type is "aws_instance" and
+		r.values["instance_type"] not in instance_types
+}
+
+main = rule { length(violations) == 0 }
